@@ -28,6 +28,10 @@ public class ActivationController {
         return ResponseEntity.ok(new GenericResponse("Activation succeed"));
     }
 
+    /*
+        Activate user.
+        Admin only function.
+     */
     @PutMapping("/admin/activate/{id}")
     public ResponseEntity<GenericResponse> activateUser(@PathVariable(name = "id") long userId) {
         userService.activateUser(userId);
