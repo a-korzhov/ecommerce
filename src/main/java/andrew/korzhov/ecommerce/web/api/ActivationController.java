@@ -23,9 +23,15 @@ public class ActivationController {
          - otherwise - change code to 'Activated' and set ACTIVE to user.
      */
     @GetMapping("/activate")
-    public ResponseEntity<GenericResponse> activateUser(@RequestParam String code) {
+    public ResponseEntity<GenericResponse> activateUserByCode(@RequestParam String code) {
         userService.activateUser(activationService.updateActivation(code));
         return ResponseEntity.ok(new GenericResponse("Activation succeed"));
+    }
+
+    @PutMapping("/admin/activate/{id}")
+    public ResponseEntity<GenericResponse> activateUser(@PathVariable(name = "id") long userId) {
+        userService.activateUser(userId);
+        return ResponseEntity.ok(new GenericResponse("User %s activated successfully", userId));
     }
 
     /*
