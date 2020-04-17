@@ -1,5 +1,7 @@
 package andrew.korzhov.ecommerce.web.api.user;
 
+import andrew.korzhov.ecommerce.domain.Activation;
+import andrew.korzhov.ecommerce.security.ActivationService;
 import andrew.korzhov.ecommerce.security.UserService;
 import andrew.korzhov.ecommerce.security.model.User;
 import andrew.korzhov.ecommerce.service.errors.AlreadyExistsException;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final ActivationService activationService;
 
     /*
         Create not active user.
@@ -25,15 +28,17 @@ public class UserController {
      */
     @PostMapping("/create")
     public ResponseEntity<GenericResponse> createUser(@RequestBody User user) {
-        boolean isCreated = userService.createUser(user);
-
-        if (!isCreated) {
-            throw new AlreadyExistsException("User %s already exists");
+        boolean isCreatedBefore = userService.createUser(user);
+        if (!isCreatedBefore) {
+            throw new AlreadyExistsException("User %s already exists", user.getUsername());
         }
+        Activation activation = activationService.saveActivationCode(user.getId());
+        activationService.sendActivationLink(user, activation.getActivationCode());
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new GenericResponse(
                         "User %s created successfully", user.getUsername())
                 );
     }
-    
+
 }

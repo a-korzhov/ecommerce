@@ -13,5 +13,5 @@ public interface UserService {
 
     GenericResponse deactivateUser(String username);
 
-    boolean activateUser(String code);
+    void activateUser(long id);
 }
