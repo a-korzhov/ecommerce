@@ -11,3 +11,17 @@ spring:
     enabled: true
     validate-on-migrate: true
     clean-disabled: false
+  mail:
+    host: smtp.gmail.com
+    username: ${mailUser}
+    password: ${mailPass}
+    port: 465
+    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+mail:
+  debug: false
