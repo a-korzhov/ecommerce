@@ -21,14 +21,19 @@ public class ActivationServiceImpl implements ActivationService {
     private final ActivationRepository activationRepository;
     private final MailService mailService;
 
+    private static final String EMAIL_MESSAGE = "Hello, %s \n" +
+            "Welcome to our shop. Please, visit this link to activate your account\n" +
+            "http://localhost:8080/api/activate?code=%s";
+    private static final String ACTIVATED = "Activated";
+
     @Override
     @Transactional
     public long updateActivation(String code) {
         Activation fromDB = activationRepository.findByActivationCode(code);
-        if (fromDB.getActivationCode().equals("Activated")) {
-            throw new AlreadyExistsException("User was activated earlier");
+        if (fromDB.getActivationCode().equals(ACTIVATED)) {
+            throw new AlreadyExistsException("User %s was activated earlier", fromDB.getUserId());
         }
-        fromDB.setActivationCode("Activated");
+        fromDB.setActivationCode(ACTIVATED);
         return fromDB.getUserId();
     }
 
@@ -51,13 +56,7 @@ public class ActivationServiceImpl implements ActivationService {
     @Override
     public void sendActivationLink(User user, String code) {
         if (!StringUtils.isEmpty(user.getEmail())) {
-            String message = String.format(
-                    "Hello, %s \n" +
-                            "Welcome to our shop. Please, visit this link to activate your account\n" +
-                            "http://localhost:8080/api/activate?code=%s",
-                    user.getUsername(),
-                    code
-            );
+            String message = String.format(EMAIL_MESSAGE, user.getUsername(), code);
             mailService.sendMessage(user.getEmail(), "Activation code", message);
         }
     }
