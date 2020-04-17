@@ -25,3 +25,7 @@ spring:
             enable: true
 mail:
   debug: false
+jwt:
+  token:
+    secret: ${token}
+    expired: 3600000
