@@ -1,6 +1,6 @@
 package andrew.korzhov.ecommerce.domain;
 
-import andrew.korzhov.ecommerce.security.User;
+import andrew.korzhov.ecommerce.security.model.User;
 import lombok.Getter;
 import lombok.Setter;
 

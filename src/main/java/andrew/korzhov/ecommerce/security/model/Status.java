@@ -1,4 +1,4 @@
-package andrew.korzhov.ecommerce.security;
+package andrew.korzhov.ecommerce.security.model;
 
 public enum Status {
 

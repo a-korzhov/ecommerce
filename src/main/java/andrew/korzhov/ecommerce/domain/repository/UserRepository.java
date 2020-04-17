@@ -1,7 +1,10 @@
 package andrew.korzhov.ecommerce.domain.repository;
 
-import andrew.korzhov.ecommerce.security.User;
+import andrew.korzhov.ecommerce.security.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    User findByUsername(String username);
+
 }

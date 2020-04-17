@@ -1,4 +1,4 @@
-package andrew.korzhov.ecommerce.security;
+package andrew.korzhov.ecommerce.security.model;
 
 import andrew.korzhov.ecommerce.domain.BaseEntity;
 import lombok.Getter;
@@ -39,5 +39,9 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    public void setNewRole(Role role) {
+        roles.add(role);
+    }
 
 }
