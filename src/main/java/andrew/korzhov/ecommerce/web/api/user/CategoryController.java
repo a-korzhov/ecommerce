@@ -1,6 +1,7 @@
 package andrew.korzhov.ecommerce.web.api.user;
 
 import andrew.korzhov.ecommerce.service.CategoryService;
+import andrew.korzhov.ecommerce.web.api.ApiConstants;
 import andrew.korzhov.ecommerce.web.dto.CategoryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping(ApiConstants.USER_CATEGORIES)
 @RequiredArgsConstructor
 public class CategoryController {
 

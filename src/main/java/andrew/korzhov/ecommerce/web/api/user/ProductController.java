@@ -1,6 +1,7 @@
 package andrew.korzhov.ecommerce.web.api.user;
 
 import andrew.korzhov.ecommerce.service.ProductService;
+import andrew.korzhov.ecommerce.web.api.ApiConstants;
 import andrew.korzhov.ecommerce.web.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping(ApiConstants.USER_PRODUCTS)
 @RequiredArgsConstructor
 public class ProductController {
 

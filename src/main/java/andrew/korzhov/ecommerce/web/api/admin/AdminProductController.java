@@ -1,6 +1,7 @@
 package andrew.korzhov.ecommerce.web.api.admin;
 
 import andrew.korzhov.ecommerce.service.ProductService;
+import andrew.korzhov.ecommerce.web.api.ApiConstants;
 import andrew.korzhov.ecommerce.web.dto.FullyProductDto;
 import andrew.korzhov.ecommerce.web.dto.ProductDto;
 import andrew.korzhov.ecommerce.web.response.GenericResponse;
@@ -11,12 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/admin/products")
+@RequestMapping(ApiConstants.ADMIN_PRODUCTS)
 @RequiredArgsConstructor
 public class AdminProductController {
 
     private final ProductService productService;
-
 
     /*
         Simple endpoint to add new product

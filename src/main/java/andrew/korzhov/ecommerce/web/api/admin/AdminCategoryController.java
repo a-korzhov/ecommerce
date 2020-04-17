@@ -1,6 +1,7 @@
 package andrew.korzhov.ecommerce.web.api.admin;
 
 import andrew.korzhov.ecommerce.service.CategoryService;
+import andrew.korzhov.ecommerce.web.api.ApiConstants;
 import andrew.korzhov.ecommerce.web.dto.CategoryDto;
 import andrew.korzhov.ecommerce.web.response.GenericResponse;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/admin/categories")
+@RequestMapping(ApiConstants.ADMIN_CATEGORIES)
 @RequiredArgsConstructor
 public class AdminCategoryController {
 

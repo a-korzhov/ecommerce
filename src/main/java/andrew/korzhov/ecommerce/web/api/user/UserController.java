@@ -5,6 +5,7 @@ import andrew.korzhov.ecommerce.security.ActivationService;
 import andrew.korzhov.ecommerce.security.UserService;
 import andrew.korzhov.ecommerce.security.model.User;
 import andrew.korzhov.ecommerce.service.errors.AlreadyExistsException;
+import andrew.korzhov.ecommerce.web.api.ApiConstants;
 import andrew.korzhov.ecommerce.web.response.GenericResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(ApiConstants.USERS_API)
 @RequiredArgsConstructor
 public class UserController {
 
