@@ -22,9 +22,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
       If token is valid - pass request.
     */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String bearerToken = request.getHeader("Authorization");
-        String token = jwtTokenProvider.resolveToken(bearerToken);
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
+        String token = jwtTokenProvider.resolveToken(request.getHeader("Authorization"));
         if (token != null) {
             Authentication auth = jwtTokenProvider.getAuthentication(token);
 

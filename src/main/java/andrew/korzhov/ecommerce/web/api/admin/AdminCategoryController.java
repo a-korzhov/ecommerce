@@ -22,7 +22,9 @@ public class AdminCategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GenericResponse> renameCategory(@PathVariable long id, @RequestParam(name = "name") String categoryName) {
+    public ResponseEntity<GenericResponse> renameCategory(
+            @PathVariable long id,
+            @RequestParam(name = "name") String categoryName) {
         return ResponseEntity.ok(categoryService.renameCategory(id, categoryName));
     }
 

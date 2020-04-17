@@ -8,16 +8,12 @@ import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Collection;
 import java.util.HashSet;
 
 @Component
@@ -25,7 +21,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthenticationFilter(JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
+    public AuthenticationFilter(JwtTokenProvider jwtTokenProvider,
+                                AuthenticationManager authenticationManager) {
         this.setAuthenticationManager(authenticationManager);
         this.jwtTokenProvider = jwtTokenProvider;
     }
@@ -36,10 +33,16 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
      */
     @SneakyThrows
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        AuthRequestUser user = new ObjectMapper().readValue(request.getInputStream(), AuthRequestUser.class);
-        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-        return getAuthenticationManager().authenticate(authenticationToken);
+    public Authentication attemptAuthentication(
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        AuthRequestUser user = new ObjectMapper()
+                .readValue(request.getInputStream(), AuthRequestUser.class);
+        return getAuthenticationManager().authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        user.getUsername(),
+                        user.getPassword()
+                ));
     }
 
     /*
@@ -48,10 +51,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         Then add token to Authorization header.
      */
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain chain,
+            Authentication authResult) {
         JwtUser user = (JwtUser) authResult.getPrincipal();
-        Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
-        String token = jwtTokenProvider.createToken(user.getUsername(), new HashSet<>(authorities));
+        String token = jwtTokenProvider.createToken(user.getUsername(), new HashSet<>(user.getAuthorities()));
         response.addHeader("Authorization", "Bearer_" + token);
     }
 

@@ -41,7 +41,9 @@ public class AdminProductController {
         Update method by product id.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDto> editProduct(@PathVariable long id, @RequestBody ProductDto p) {
+    public ResponseEntity<ProductDto> editProduct(
+            @PathVariable long id,
+            @RequestBody ProductDto p) {
         return ResponseEntity.ok(productService.updateProduct(id, p));
     }
 

@@ -27,8 +27,8 @@ public class JwtTokenProviderImpl implements JwtTokenProvider {
     private long validityInMilliseconds;
 
     /*
-            Encode secret key from env.
-         */
+        Encode secret key from env.
+     */
     @PostConstruct
     protected void init() {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());

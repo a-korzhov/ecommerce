@@ -1,11 +1,13 @@
 package andrew.korzhov.ecommerce.service.errors.handler;
 
 import andrew.korzhov.ecommerce.service.errors.ApiError;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,8 +15,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -25,18 +27,20 @@ public class MethodArgumentNotValidExceptionHandler extends ResponseEntityExcept
                                                                   HttpHeaders headers,
                                                                   HttpStatus status,
                                                                   WebRequest request) {
-        Map<String, String> validationErrors = new HashMap<>();
+        BindingResult result = ex.getBindingResult();
+        Map<String, String> validationErrors = result.getFieldErrors().stream()
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        DefaultMessageSourceResolvable::getDefaultMessage));
 
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            validationErrors.put(error.getField(), error.getDefaultMessage());
-        }
-        for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
-            validationErrors.put(error.getObjectName(), error.getDefaultMessage());
-        }
+        validationErrors.putAll(result.getGlobalErrors().stream()
+                .collect(Collectors.toMap(
+                        ObjectError::getObjectName,
+                        DefaultMessageSourceResolvable::getDefaultMessage)));
+
         ApiError apiError =
-                new ApiError(HttpStatus.BAD_REQUEST, ex.getBindingResult().getObjectName(), validationErrors);
-        return handleExceptionInternal(
-                ex, apiError, headers, apiError.getStatus(), request);
+                new ApiError(HttpStatus.BAD_REQUEST, result.getObjectName(), validationErrors);
+        return handleExceptionInternal(ex, apiError, headers, apiError.getStatus(), request);
     }
 
 }
