@@ -57,7 +57,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             FilterChain chain,
             Authentication authResult) {
         JwtUser user = (JwtUser) authResult.getPrincipal();
-        String token = jwtTokenProvider.createToken(user.getUsername(), new HashSet<>(user.getAuthorities()));
+        String token = jwtTokenProvider.createToken(user.getId(), new HashSet<>(user.getAuthorities()));
         response.addHeader("Authorization", "Bearer_" + token);
     }
 

@@ -8,7 +8,7 @@ public final class ApiConstants {
     public static final String USERS_API = API_PREFIX + "/users";
     public static final String USER_CATEGORIES = API_PREFIX + "/categories";
     public static final String USER_PRODUCTS = API_PREFIX + "/products";
-
+    public static final String USER_CART_ITEM = API_PREFIX + "/cart";
 
     // ADMIN
     public static final String ADMIN_API_PREFIX = API_PREFIX + "/admin";

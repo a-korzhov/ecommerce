@@ -39,9 +39,9 @@ public class JwtTokenProviderImpl implements JwtTokenProvider {
         and time of validity in milliseconds.
      */
     @Override
-    public String createToken(String username, Set<? extends GrantedAuthority> roles) {
+    public String createToken(Long id, Set<? extends GrantedAuthority> roles) {
 
-        Claims claims = Jwts.claims().setSubject(username);
+        Claims claims = Jwts.claims().setSubject(String.valueOf(id));
         claims.put("aud", RoleUtils.getRoleNames(roles));
 
         Date now = new Date();
@@ -70,9 +70,9 @@ public class JwtTokenProviderImpl implements JwtTokenProvider {
         if (!claims.getBody().getExpiration().before(new Date())) {
             Claims body = claims.getBody();
             return new UsernamePasswordAuthenticationToken(
-                    token,
+                    body.getSubject(),
                     null,
-                    parseRoles(body.getAudience().substring(7)).stream()
+                    parseRoles(body.getAudience()).stream()
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList())
             );

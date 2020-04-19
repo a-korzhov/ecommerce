@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface JwtTokenProvider {
 
-    String createToken(String username, Set<? extends GrantedAuthority> roles);
+    String createToken(Long userId, Set<? extends GrantedAuthority> roles);
 
     Authentication getAuthentication(String token);
 
