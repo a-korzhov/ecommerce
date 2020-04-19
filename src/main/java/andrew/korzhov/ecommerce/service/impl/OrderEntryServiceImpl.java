@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,10 +25,10 @@ public class OrderEntryServiceImpl implements OrderEntryService {
 
     @Override
     @Transactional
-    public List<OrderEntryDto> getResult(long orderId, long userId) {
+    public List<OrderEntryDto> getResult(final long orderId, final long userId) {
         List<CartItem> cart = cartItemRepository.getAllByUserId(userId);
         List<OrderEntry> orderEntries = cart.stream()
-                .map(c -> getOrderEntry(orderId, c))
+                .map(c -> migrateToOrderEntry(orderId, c))
                 .collect(Collectors.toList());
 
         entryRepository.saveAll(orderEntries);
@@ -42,18 +40,12 @@ public class OrderEntryServiceImpl implements OrderEntryService {
                 .collect(Collectors.toList());
     }
 
-    private OrderEntry getOrderEntry(long orderId, CartItem c) {
+    private OrderEntry migrateToOrderEntry(long orderId, CartItem c) {
         OrderEntry oe = new OrderEntry();
-        BigDecimal total = c.getTotal();
-        int productQuantity = c.getProductQuantity();
         oe.setProductId(c.getProductId());
         oe.setOrderId(orderId);
-        oe.setProductQuantity(productQuantity);
-        BigDecimal forOne = total.divide(
-                BigDecimal.valueOf(productQuantity),
-                new MathContext(0)
-        );
-        oe.setPrice(forOne);
+        oe.setProductQuantity(c.getProductQuantity());
+        oe.setPrice(c.getForOne());
         return oe;
     }
 }

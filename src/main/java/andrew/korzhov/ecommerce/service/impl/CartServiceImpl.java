@@ -10,9 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -25,24 +22,20 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public CartItemDto save(CartItemDto c) {
-        Product one = productRepository.getOne(c.getProductId());
-        BigDecimal sum = one.getPrice().multiply(
-                BigDecimal.valueOf(c.getProductQuantity()),
-                new MathContext(0)
-        );
-        c.setTotal(sum);
+        Product product = productRepository.getOne(c.getProductId());
+        c.setTotal(product.getSum(c.getProductQuantity()));
         return cartItemMapper.toDto(cartItemRepository.save(cartItemMapper.toEntity(c)));
     }
 
     @Override
     @Transactional
-    public void deleteByUserId(long id) {
+    public void deleteByUserId(final long id) {
         cartItemRepository.deleteByUserId(id);
     }
 
     @Override
     @Transactional
-    public void deleteByProductId(long id) {
+    public void deleteByProductId(final long id) {
         cartItemRepository.deleteByProductId(id);
     }
 }

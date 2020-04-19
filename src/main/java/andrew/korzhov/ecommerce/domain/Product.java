@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 @Entity
 @Table(name = "products")
@@ -28,5 +29,12 @@ public class Product extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "vendor_id", referencedColumnName = "id")
     private Vendor vendor;
+
+    public BigDecimal getSum(final int quantity) {
+        return price.multiply(
+                BigDecimal.valueOf(quantity),
+                new MathContext(0)
+        );
+    }
 
 }

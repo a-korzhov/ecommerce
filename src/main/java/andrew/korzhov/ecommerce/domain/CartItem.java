@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 @Entity
 @Table(name = "cart_entries")
@@ -25,4 +26,9 @@ public class CartItem extends BaseEntity {
     @Column(name = "product_id")
     private Long productId;
 
+    public BigDecimal getForOne() {
+        return this.total.divide(
+                BigDecimal.valueOf(this.productQuantity),
+                new MathContext(0));
+    }
 }

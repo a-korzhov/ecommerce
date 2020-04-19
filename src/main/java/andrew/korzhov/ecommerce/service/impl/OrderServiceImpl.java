@@ -27,12 +27,12 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderDto save(long userId) {
         List<CartItem> cart = cartItemRepository.getAllByUserId(userId);
-        BigDecimal total = new BigDecimal("0");
+        BigDecimal totalAmount = new BigDecimal("0");
         for (CartItem c : cart) {
-            total = total.add(c.getTotal());
+            totalAmount = totalAmount.add(c.getTotal());
         }
         Order order = new Order();
-        order.setTotalAmount(total);
+        order.setTotalAmount(totalAmount);
         order.setUserId(userId);
 
         return orderMapper.toDto(orderRepository.save(order));
