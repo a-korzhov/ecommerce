@@ -26,7 +26,10 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartItemDto save(CartItemDto c) {
         Product one = productRepository.getOne(c.getProductId());
-        BigDecimal sum = one.getPrice().multiply(BigDecimal.valueOf(c.getProductQuantity()), new MathContext(0));
+        BigDecimal sum = one.getPrice().multiply(
+                BigDecimal.valueOf(c.getProductQuantity()),
+                new MathContext(0)
+        );
         c.setTotal(sum);
         return cartItemMapper.toDto(cartItemRepository.save(cartItemMapper.toEntity(c)));
     }

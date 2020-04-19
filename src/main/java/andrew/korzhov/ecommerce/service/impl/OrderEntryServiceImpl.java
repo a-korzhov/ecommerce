@@ -44,14 +44,11 @@ public class OrderEntryServiceImpl implements OrderEntryService {
 
     private OrderEntry getOrderEntry(long orderId, CartItem c) {
         OrderEntry oe = new OrderEntry();
-
         BigDecimal total = c.getTotal();
         int productQuantity = c.getProductQuantity();
-
         oe.setProductId(c.getProductId());
         oe.setOrderId(orderId);
         oe.setProductQuantity(productQuantity);
-        oe.setTotal(total);
         BigDecimal forOne = total.divide(
                 BigDecimal.valueOf(productQuantity),
                 new MathContext(0)

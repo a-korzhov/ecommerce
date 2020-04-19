@@ -29,10 +29,8 @@ public class OrderServiceImpl implements OrderService {
         List<CartItem> cart = cartItemRepository.getAllByUserId(userId);
         BigDecimal total = new BigDecimal("0");
         for (CartItem c : cart) {
-            BigDecimal oneProduct = c.getTotal();
-            total = total.add(oneProduct);
+            total = total.add(c.getTotal());
         }
-
         Order order = new Order();
         order.setTotalAmount(total);
         order.setUserId(userId);
