@@ -2,6 +2,7 @@ package andrew.korzhov.ecommerce.web.api.user;
 
 import andrew.korzhov.ecommerce.service.OrderService;
 import andrew.korzhov.ecommerce.utils.AuthUserUtil;
+import andrew.korzhov.ecommerce.web.api.ApiConstants;
 import andrew.korzhov.ecommerce.web.dto.OrderDto;
 import andrew.korzhov.ecommerce.web.response.GenericResponse;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping(ApiConstants.USER_ORDER)
 @RequiredArgsConstructor
 public class OrderController {
 

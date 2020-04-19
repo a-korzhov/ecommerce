@@ -2,6 +2,7 @@ package andrew.korzhov.ecommerce.web.api.user;
 
 import andrew.korzhov.ecommerce.service.OrderEntryService;
 import andrew.korzhov.ecommerce.utils.AuthUserUtil;
+import andrew.korzhov.ecommerce.web.api.ApiConstants;
 import andrew.korzhov.ecommerce.web.dto.OrderEntryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/entries")
+@RequestMapping(ApiConstants.USER_ORDER_ENTRY)
 @RequiredArgsConstructor
 public class OrderEntryController {
 
