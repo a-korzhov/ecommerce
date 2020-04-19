@@ -24,14 +24,17 @@ public class CartItemController {
         return ResponseEntity.ok(cartService.save(dto));
     }
 
+    /*
+        To remove all products from the cart use only userId param.
+        To remove only 1 type of products - use both params.
+     */
     @DeleteMapping("/delete")
     public ResponseEntity<GenericResponse> deleteCartItem(
-            @RequestParam(name = "userId", required = false) Long userId,
+            @RequestParam(name = "userId") Long userId,
             @RequestParam(name = "productId", required = false) Long productId) {
+        cartService.deleteByUserId(userId);
 
-        if (userId != null) {
-            cartService.deleteByUserId(userId);
-        } else if (productId != null) {
+        if (productId != null) {
             cartService.deleteByProductId(productId);
         } else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GenericResponse("Cart item not found"));
 
