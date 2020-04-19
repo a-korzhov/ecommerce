@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     @Modifying
@@ -15,5 +17,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     @Modifying
     @Query(value = "DELETE FROM cart_entries WHERE product_id = :pId", nativeQuery = true)
     void deleteByProductId(@Param("pId") long pId);
+
+    List<CartItem> getAllByUserId(long userId);
 
 }

@@ -3,7 +3,10 @@ package andrew.korzhov.ecommerce.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 
 @Entity
@@ -12,13 +15,17 @@ import java.math.BigDecimal;
 @Setter
 public class OrderEntry extends BaseEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
+//    @ManyToOne
+//    @JoinColumn(name = "product_id", referencedColumnName = "id")
+//    private Product product;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "order_id", referencedColumnName = "id")
+//    private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private Order order;
+    private Long productId;
+
+    private Long orderId;
 
     @Column(name = "product_quantity")
     private int productQuantity;
@@ -35,4 +42,8 @@ public class OrderEntry extends BaseEntity {
     @Column(name = "total")
     private BigDecimal total;
 
+    @PrePersist
+    public void total() {
+        this.total = price.multiply(BigDecimal.valueOf(productQuantity));
+    }
 }

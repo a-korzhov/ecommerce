@@ -18,6 +18,9 @@ public class Product extends BaseEntity {
     @Column(name = "price")
     private BigDecimal price;
 
+    @Column(name = "quantity")
+    private int quantity;
+
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;

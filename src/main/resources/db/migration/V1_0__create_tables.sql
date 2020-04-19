@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS products
     id          BIGSERIAL PRIMARY KEY,
     name        VARCHAR(50)                       NOT NULL,
     price       NUMERIC(15, 2)                    NOT NULL,
+    quantity    INT                               NOT NULL,
     category_id BIGINT REFERENCES categories (id) NOT NULL,
     vendor_id   BIGINT REFERENCES vendors (id)    NOT NULL,
     UNIQUE (name, category_id, vendor_id)
@@ -45,10 +46,11 @@ CREATE TABLE IF NOT EXISTS user_role
 CREATE TABLE IF NOT EXISTS orders
 (
     id           BIGSERIAL PRIMARY KEY,
-    created_at   DATE                         NOT NULL,
+    created_at   TIMESTAMP WITH TIME ZONE     NOT NULL,
     total_amount NUMERIC(15, 2)               NOT NULL,
     user_id      BIGINT REFERENCES users (id) NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS order_entries
 (
     id               BIGSERIAL PRIMARY KEY,
@@ -61,7 +63,9 @@ CREATE TABLE IF NOT EXISTS order_entries
 
 CREATE TABLE IF NOT EXISTS cart_entries
 (
+    id               BIGSERIAL PRIMARY KEY,
     product_quantity INT                             NOT NULL,
+    total            NUMERIC(15, 2)                  NOT NULL,
     product_id       BIGINT REFERENCES products (id) NOT NULL,
     user_id          BIGINT REFERENCES users (id)    NOT NULL,
     UNIQUE (product_id, user_id)
