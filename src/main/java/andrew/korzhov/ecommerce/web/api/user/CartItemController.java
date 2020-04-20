@@ -6,6 +6,7 @@ import andrew.korzhov.ecommerce.web.api.ApiConstants;
 import andrew.korzhov.ecommerce.web.dto.CartItemDto;
 import andrew.korzhov.ecommerce.web.response.GenericResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,9 @@ public class CartItemController {
     @PostMapping("/add")
     public ResponseEntity<CartItemDto> addCartItem(@RequestBody CartItemDto dto, Authentication auth) {
         dto.setUserId(AuthUserUtil.getUserId(auth));
-        return ResponseEntity.ok(cartService.save(dto));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(cartService.save(dto));
     }
 
     /*

@@ -6,6 +6,7 @@ import andrew.korzhov.ecommerce.web.dto.FullyProductDto;
 import andrew.korzhov.ecommerce.web.dto.ProductDto;
 import andrew.korzhov.ecommerce.web.response.GenericResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,9 @@ public class AdminProductController {
      */
     @PostMapping("/add")
     public ResponseEntity<ProductDto> addProduct(@RequestBody @Valid ProductDto p) {
-        return ResponseEntity.ok(productService.createProduct(p));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(productService.createProduct(p));
     }
 
     /*

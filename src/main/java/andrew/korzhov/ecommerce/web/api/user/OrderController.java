@@ -6,6 +6,7 @@ import andrew.korzhov.ecommerce.web.api.ApiConstants;
 import andrew.korzhov.ecommerce.web.dto.OrderDto;
 import andrew.korzhov.ecommerce.web.response.GenericResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,9 @@ public class OrderController {
 
     @PostMapping("/save")
     public ResponseEntity<OrderDto> save(Authentication auth) {
-        return ResponseEntity.ok(orderService.save(AuthUserUtil.getUserId(auth)));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(orderService.save(AuthUserUtil.getUserId(auth)));
     }
 
     @DeleteMapping("/cancel/{id}")

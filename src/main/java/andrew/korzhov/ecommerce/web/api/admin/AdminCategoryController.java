@@ -5,6 +5,7 @@ import andrew.korzhov.ecommerce.web.api.ApiConstants;
 import andrew.korzhov.ecommerce.web.dto.CategoryDto;
 import andrew.korzhov.ecommerce.web.response.GenericResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,9 @@ public class AdminCategoryController {
 
     @PostMapping("/create")
     public ResponseEntity<CategoryDto> createCategory(@RequestBody @Valid CategoryDto c) {
-        return ResponseEntity.ok(categoryService.createCategory(c));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(categoryService.createCategory(c));
     }
 
     @PutMapping("/{id}")
