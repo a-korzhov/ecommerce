@@ -65,7 +65,10 @@ public class ProductControllerTest extends EcommerceApplicationTests {
         productsDtoList = new ArrayList<>();
         productsDtoList.add(productDto);
 
-        jwtTokenWithUserRole = "Bearer_" + jwtTokenProvider.createToken(1L, Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+        jwtTokenWithUserRole = "Bearer_" + jwtTokenProvider.createToken(
+                1L,
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
+        );
     }
 
     @Test
@@ -89,9 +92,48 @@ public class ProductControllerTest extends EcommerceApplicationTests {
 
     ProductsResponse productsResponse;
     List<Product> productList;
-    List<ProductDto> content = new ArrayList<>();
+    List<ProductDto> responseContent = new ArrayList<>();
+    ObjectMapper objectMapper = new ObjectMapper();
 
-    public ProductDto toDto(Product product) {
+    @Test
+    void getProducts() throws Exception {
+        int size = 3, page = 0, totalPages = 2;
+
+        productList = new ArrayList<>();
+
+        fillProductList();
+
+        productList.forEach(p -> responseContent.add(toDto(p)));
+
+        productsResponse = new ProductsResponse();
+        productsResponse.setPage(page);
+        productsResponse.setSize(size);
+        productsResponse.setContent(responseContent);
+        productsResponse.setTotalPages(totalPages);
+
+        given(productService.getByPage(page, size)).willReturn(productsResponse);
+
+
+        productService.getByPage(page, size);
+        verify(productService, times(1)).getByPage(page, size);
+
+        mockMvc.perform(get("/api/products?page=" + page + "&size=" + size)
+                .header(AUTHORIZATION, jwtTokenWithUserRole)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.page", is(0)))
+                .andExpect(jsonPath("$.size", is(3)))
+//                .andExpect(jsonPath("$.content[0]", contains("product1")))
+//                .andExpect(jsonPath("$.content[0]", is(productsResponse.getContent().get(0)))) // ??? How to compare json array of response to List<T> ?
+                .andExpect(jsonPath("$.totalPages", is(2)))
+        ;
+    }
+
+    @Test
+    void testGetProducts() {
+    }
+
+    private ProductDto toDto(Product product) {
         ProductDto dto = new ProductDto();
         dto.setId(product.getId());
         dto.setPrice(product.getPrice());
@@ -101,13 +143,7 @@ public class ProductControllerTest extends EcommerceApplicationTests {
         return dto;
     }
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    @Test
-    void getProducts() throws Exception {
-        int size = 3, page = 0, totalPages = 2;
-
-        productList = new ArrayList<>();
+    private void fillProductList() {
         for (long i = 1; i <= 5; i++) {
             Product product = new Product();
             product.setId(i);
@@ -125,35 +161,5 @@ public class ProductControllerTest extends EcommerceApplicationTests {
 
             productList.add(product);
         }
-        for (Product p : productList) {
-            content.add(toDto(p));
-        }
-
-        productsResponse = new ProductsResponse();
-        productsResponse.setPage(page);
-        productsResponse.setSize(size);
-        productsResponse.setContent(content);
-        productsResponse.setTotalPages(totalPages);
-
-        given(productService.getByPage(page, size)).willReturn(productsResponse);
-
-        String firstElement = objectMapper.writeValueAsString(content.get(0));
-
-        productService.getByPage(page, size);
-        verify(productService, times(1)).getByPage(page, size);
-
-        mockMvc.perform(get("/api/products?page=" + page + "&size=" + size)
-                .header(AUTHORIZATION, jwtTokenWithUserRole)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.page", is(0)))
-                .andExpect(jsonPath("$.size", is(3)))
-//                .andExpect(jsonPath("$.content[0]", contains("product1")))
-                .andExpect(jsonPath("$.totalPages", is(2)))
-        ;
-    }
-
-    @Test
-    void testGetProducts() {
     }
 }
