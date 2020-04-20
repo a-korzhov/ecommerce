@@ -7,6 +7,7 @@ import andrew.korzhov.ecommerce.domain.Vendor;
 import andrew.korzhov.ecommerce.service.ProductService;
 import andrew.korzhov.ecommerce.web.dto.ProductDto;
 import andrew.korzhov.ecommerce.web.response.ProductsResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +28,8 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -88,7 +91,7 @@ public class ProductControllerTest extends EcommerceApplicationTests {
     List<Product> productList;
     List<ProductDto> content = new ArrayList<>();
 
-    public ProductDto toDto(Product product){
+    public ProductDto toDto(Product product) {
         ProductDto dto = new ProductDto();
         dto.setId(product.getId());
         dto.setPrice(product.getPrice());
@@ -98,12 +101,14 @@ public class ProductControllerTest extends EcommerceApplicationTests {
         return dto;
     }
 
+    ObjectMapper objectMapper = new ObjectMapper();
+
     @Test
     void getProducts() throws Exception {
-        int size = 3, page = 0;
+        int size = 3, page = 0, totalPages = 2;
 
         productList = new ArrayList<>();
-        for (long i = 1; i <= 3; i++) {
+        for (long i = 1; i <= 5; i++) {
             Product product = new Product();
             product.setId(i);
             product.setName("product" + i);
@@ -120,7 +125,7 @@ public class ProductControllerTest extends EcommerceApplicationTests {
 
             productList.add(product);
         }
-        for(Product p : productList){
+        for (Product p : productList) {
             content.add(toDto(p));
         }
 
@@ -128,9 +133,14 @@ public class ProductControllerTest extends EcommerceApplicationTests {
         productsResponse.setPage(page);
         productsResponse.setSize(size);
         productsResponse.setContent(content);
-        productsResponse.setTotalPages(1);
+        productsResponse.setTotalPages(totalPages);
 
         given(productService.getByPage(page, size)).willReturn(productsResponse);
+
+        String firstElement = objectMapper.writeValueAsString(content.get(0));
+
+        productService.getByPage(page, size);
+        verify(productService, times(1)).getByPage(page, size);
 
         mockMvc.perform(get("/api/products?page=" + page + "&size=" + size)
                 .header(AUTHORIZATION, jwtTokenWithUserRole)
@@ -138,7 +148,7 @@ public class ProductControllerTest extends EcommerceApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.page", is(0)))
                 .andExpect(jsonPath("$.size", is(3)))
-                .andExpect(jsonPath("$[0].content", is(content.get(0))))
+//                .andExpect(jsonPath("$.content[0]", contains("product1")))
                 .andExpect(jsonPath("$.totalPages", is(2)))
         ;
     }
