@@ -37,5 +37,8 @@ public class OrderEntry extends BaseEntity {
     @PrePersist
     public void total() {
         this.total = price.multiply(BigDecimal.valueOf(productQuantity));
+        if (productQuantity > 3) {
+            this.total = this.total.subtract(new BigDecimal("200"));
+        }
     }
 }
