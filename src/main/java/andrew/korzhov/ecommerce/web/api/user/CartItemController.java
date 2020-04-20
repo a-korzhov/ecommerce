@@ -6,7 +6,6 @@ import andrew.korzhov.ecommerce.web.api.ApiConstants;
 import andrew.korzhov.ecommerce.web.dto.CartItemDto;
 import andrew.korzhov.ecommerce.web.response.GenericResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -32,12 +31,11 @@ public class CartItemController {
     public ResponseEntity<GenericResponse> deleteCartItem(
             @RequestParam(name = "userId") Long userId,
             @RequestParam(name = "productId", required = false) Long productId) {
-        cartService.deleteByUserId(userId);
-
         if (productId != null) {
             cartService.deleteByProductId(productId);
-        } else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GenericResponse("Cart item not found"));
-
+        } else {
+            cartService.deleteByUserId(userId);
+        }
         return ResponseEntity.ok(new GenericResponse("Cart item deleted"));
     }
 
