@@ -1,11 +1,5 @@
 # Ecommerce project
 
-### To view project code, please, follow -> development branch
-### https://github.com/a-korzhov/ecommerce/tree/development
-
-### To view frontend project, follow -> development branch:
-### https://github.com/a-korzhov/ecommerce-frontend/tree/development
-
 ## I am using these technologies in my project:
 
 - **Spring Boot 2**  with following starters:
