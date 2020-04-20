@@ -14,7 +14,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.price = 0")
     List<Product> findByPriceIsZero();
 
-    @Modifying(clearAutomatically = true)
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE Product p SET p.name = :name, p.price = :price WHERE p.id = :id")
     void update(long id, @Param("name") String name, @Param("price") BigDecimal price);
 

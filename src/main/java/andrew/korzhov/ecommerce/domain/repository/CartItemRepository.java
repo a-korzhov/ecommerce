@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = "DELETE FROM cart_entries WHERE user_id = :userId", nativeQuery = true)
     void deleteByUserId(@Param("userId") long userId);
 
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = "DELETE FROM cart_entries WHERE product_id = :pId", nativeQuery = true)
     void deleteByProductId(@Param("pId") long pId);
 

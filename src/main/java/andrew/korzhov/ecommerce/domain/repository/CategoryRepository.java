@@ -14,7 +14,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findAllByParentId(long pId);
 
-    @Modifying(clearAutomatically = true)
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE Category c SET c.name = :name WHERE c.id = :id")
     void updateName(@Param("id") long id, @Param("name") String categoryName);
 
