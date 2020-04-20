@@ -1,6 +1,7 @@
 package andrew.korzhov.ecommerce.web.api.user;
 
 import andrew.korzhov.ecommerce.service.CartService;
+import andrew.korzhov.ecommerce.utils.AuthUserUtil;
 import andrew.korzhov.ecommerce.web.api.ApiConstants;
 import andrew.korzhov.ecommerce.web.dto.CartItemDto;
 import andrew.korzhov.ecommerce.web.response.GenericResponse;
@@ -18,9 +19,8 @@ public class CartItemController {
     private final CartService cartService;
 
     @PostMapping("/add")
-    public ResponseEntity<CartItemDto> addCartItem(@RequestBody CartItemDto dto, Authentication authentication) {
-        String principal = (String) authentication.getPrincipal();
-        dto.setUserId(Long.parseLong(principal));
+    public ResponseEntity<CartItemDto> addCartItem(@RequestBody CartItemDto dto, Authentication auth) {
+        dto.setUserId(AuthUserUtil.getUserId(auth));
         return ResponseEntity.ok(cartService.save(dto));
     }
 
