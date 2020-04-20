@@ -16,8 +16,10 @@
 
     <properties>
         <java.version>11</java.version>
+        <apache.commons-csv.version>1.8</apache.commons-csv.version>
         <mapstruct.version>1.3.1.Final</mapstruct.version>
         <lombok.version>1.18.12</lombok.version>
+        <maven.test.skip>true</maven.test.skip>
     </properties>
 
     <dependencies>
@@ -63,6 +65,17 @@
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>${apache.commons-csv.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

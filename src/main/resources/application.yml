@@ -3,6 +3,7 @@ spring:
     url: ${dbUrl}
     username: ${dbUser}
     password: ${dbPassword}
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
   jpa:
     hibernate:
       ddl-auto: validate
