@@ -1,5 +1,6 @@
 package andrew.korzhov.ecommerce.service.impl;
 
+import andrew.korzhov.ecommerce.domain.Product;
 import andrew.korzhov.ecommerce.domain.repository.ProductRepository;
 import andrew.korzhov.ecommerce.service.CategoryService;
 import andrew.korzhov.ecommerce.service.ProductService;
@@ -10,7 +11,11 @@ import andrew.korzhov.ecommerce.web.dto.FullyProductDto;
 import andrew.korzhov.ecommerce.web.dto.ProductDto;
 import andrew.korzhov.ecommerce.web.dto.VendorDto;
 import andrew.korzhov.ecommerce.web.response.GenericResponse;
+import andrew.korzhov.ecommerce.web.response.ProductsResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +37,19 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findByPriceIsZero().stream()
                 .map(productMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductsResponse getSortedByCategoryIdAndPrice(long cId, int page, int size) {
+        Page<Product> productPage = productRepository
+                .findAllByCategoryId(cId, PageRequest.of(page, size, Sort.by("price").ascending()));
+        return new ProductsResponse(size, page, productPage, productMapper);
+    }
+
+    @Override
+    public ProductsResponse getByPage(int page, int size) {
+        Page<Product> productPage = productRepository.findAll(PageRequest.of(page, size));
+        return new ProductsResponse(size, page, productPage, productMapper);
     }
 
     /*

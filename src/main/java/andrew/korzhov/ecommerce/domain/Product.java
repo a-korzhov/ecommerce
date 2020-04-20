@@ -36,5 +36,12 @@ public class Product extends BaseEntity {
                 new MathContext(0)
         );
     }
+    public Long getCategoryId(){
+        return this.category.getId();
+    }
+
+    public Long getVendorId(){
+        return this.vendor.getId();
+    }
 
 }
