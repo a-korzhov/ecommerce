@@ -4,6 +4,7 @@ import andrew.korzhov.ecommerce.domain.Product;
 import andrew.korzhov.ecommerce.domain.repository.CartItemRepository;
 import andrew.korzhov.ecommerce.domain.repository.ProductRepository;
 import andrew.korzhov.ecommerce.service.CartService;
+import andrew.korzhov.ecommerce.service.errors.NotFoundException;
 import andrew.korzhov.ecommerce.service.mapper.CartItemMapper;
 import andrew.korzhov.ecommerce.web.dto.CartItemDto;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,10 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartItemDto save(CartItemDto c) {
         Product product = productRepository.getOne(c.getProductId());
+        int quantity = product.getQuantity() - c.getProductQuantity();
+        if (quantity >= 0) {
+            product.setQuantity(quantity);
+        } else throw new NotFoundException("Product not found in stock or not enough");
         c.setTotal(product.getSum(c.getProductQuantity()));
         return cartItemMapper.toDto(cartItemRepository.save(cartItemMapper.toEntity(c)));
     }
