@@ -18,14 +18,14 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<OrderDto> save(Authentication auth) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(orderService.save(AuthUserUtil.getUserId(auth)));
     }
 
-    @DeleteMapping("/cancel/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<GenericResponse> delete(@PathVariable long id) {
         orderService.deleteById(id);
         return ResponseEntity.ok(new GenericResponse("Order %s canceled successfully", id));

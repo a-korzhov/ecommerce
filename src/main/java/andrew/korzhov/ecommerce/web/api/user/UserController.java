@@ -27,7 +27,7 @@ public class UserController {
         Create not active user.
         To activate user look into andrew.korzhov.ecommerce.web.api.ActivationController
      */
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<GenericResponse> createUser(@RequestBody User user) {
         boolean isCreatedBefore = userService.createUser(user);
         if (!isCreatedBefore) {

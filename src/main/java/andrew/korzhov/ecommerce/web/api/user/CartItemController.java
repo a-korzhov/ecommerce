@@ -18,7 +18,7 @@ public class CartItemController {
 
     private final CartService cartService;
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<CartItemDto> addCartItem(@RequestBody CartItemDto dto, Authentication auth) {
         dto.setUserId(AuthUserUtil.getUserId(auth));
         return ResponseEntity
@@ -30,7 +30,7 @@ public class CartItemController {
         To remove all products from the cart use only userId param.
         To remove only 1 type of products - use both params.
      */
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public ResponseEntity<GenericResponse> deleteCartItem(
             @RequestParam(name = "userId") Long userId,
             @RequestParam(name = "productId", required = false) Long productId) {

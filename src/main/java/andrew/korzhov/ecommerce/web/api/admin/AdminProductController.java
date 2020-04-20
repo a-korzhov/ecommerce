@@ -23,7 +23,7 @@ public class AdminProductController {
         Simple endpoint to add new product
         with already existing category and vendor.
      */
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<ProductDto> addProduct(@RequestBody @Valid ProductDto p) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -35,7 +35,7 @@ public class AdminProductController {
         If category or vendor already exists in database,
         then it will not be saved again.
      */
-    @PostMapping("/add/new")
+    @PostMapping("/new")
     public ResponseEntity<ProductDto> addNewProduct(@RequestBody @Valid FullyProductDto p) {
         return ResponseEntity.ok(productService.fullyCreateProduct(p));
     }

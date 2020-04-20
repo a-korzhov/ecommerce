@@ -21,11 +21,12 @@ public class OrderEntryController {
 
     private final OrderEntryService entryService;
 
-    @GetMapping("/result/{orderId}")
+    @GetMapping("/{orderId}")
     public ResponseEntity<List<OrderEntryDto>> getResult(
             @PathVariable(name = "orderId") Long id,
             Authentication auth
     ) {
         return ResponseEntity.ok(entryService.getResult(id, AuthUserUtil.getUserId(auth)));
     }
+
 }
