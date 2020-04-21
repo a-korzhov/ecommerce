@@ -58,20 +58,6 @@ class UserControllerTest extends EcommerceApplicationTests {
         given(activationService.saveActivationCode(user.getId())).willReturn(activation);
     }
 
-    private void fillActivation() {
-        activation = new Activation();
-        activation.setUserId(user.getId());
-        activation.setActivationCode(UUID.randomUUID().toString());
-    }
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -100,5 +86,19 @@ class UserControllerTest extends EcommerceApplicationTests {
         user.setRoles(Collections.singleton(Role.ROLE_USER));
         user.setStatus(Status.NOT_ACTIVE);
         user.setCreatedAt(LocalDate.now());
+    }
+
+    private void fillActivation() {
+        activation = new Activation();
+        activation.setUserId(user.getId());
+        activation.setActivationCode(UUID.randomUUID().toString());
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
