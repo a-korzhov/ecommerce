@@ -1,9 +1,25 @@
 # Ecommerce project
 
+## API with following functionalities:
+- Security:
+  - JWT authentication
+  - password encryption
+  - role permission
+  - email activation 
+- Admin API:
+  - add vendors, products, categories
+  - block/activate user
+- User API:
+  - list categories
+  - add product to cart
+  - apply choices and list order entries
+  - order product
+ 
+
 ## I am using these technologies in my project:
 
 - **Spring Boot 2**  with following starters:
-  
+  -
   - Web
   - Data JPA
   - Security
